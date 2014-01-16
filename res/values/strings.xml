@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ChallengeAccepted</string>
+    <string name="menu_settings">Settings</string>
+    <string name="logging_in">Fazendo login&#8230;</string>
+    <string name="registering">Registrando&#8230;</string>
+    <string name="login_success">Logado com sucesso!</string>
+    <string name="register_success">Registrado com sucesso!</string>
+    <string name="register_fail">Ocorreu um erro no registro. Tente novamente.</string>
+    <string name="wrong_login_or_password">Email ou senha incorretos.</string>
+    <string name="user_exists">Este usuário já está cadastrado.</string>
+    <string name="login_fail">Erro ao efetuar login. Tente novamente.</string>
+    <string name="no_connection">Verifique sua conexão com a internet.</string>
+    <string name="login">Login</string>
+    <string name="register">Registrar-se</string>
+    <string name="fill_all_blanks">Preencha todos os campos.</string>
+    <string name="tab1_challenges">Desafios</string>
+
+</resources>
