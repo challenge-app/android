@@ -21,7 +21,7 @@ import br.com.challengeaccepted.exception.NoConnectionException;
 import br.com.challengeaccepted.exception.UnauthorizedException;
 
 @SuppressLint("ValidFragment")
-public class ChallengeFragment extends ListFragment {
+public class ChallengeFriendsActivity extends ListFragment {
 
 	// Layout Variables
 	private ListView listView;
@@ -29,9 +29,9 @@ public class ChallengeFragment extends ListFragment {
 	private Context context;
 	private AsyncGetSentChallenges asyncGetSentChallenges;
 		
-	public ChallengeFragment(){}
+	public ChallengeFriendsActivity(){}
 	
-	public ChallengeFragment(Context context) {
+	public ChallengeFriendsActivity(Context context) {
 		this.context = context;
 	}
 	
