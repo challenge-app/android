@@ -1,6 +1,7 @@
 package br.com.challengeaccepted.api;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -12,7 +13,9 @@ import org.json.JSONObject;
 import br.com.challengeaccepted.bean.Challenge;
 import br.com.challengeaccepted.bean.User;
 import br.com.challengeaccepted.commons.Constants;
+import br.com.challengeaccepted.commons.Session;
 import br.com.challengeaccepted.exception.NoConnectionException;
+import br.com.challengeaccepted.exception.UnauthorizedException;
 import br.com.challengeaccepted.exception.UserExistsException;
 import br.com.challengeaccepted.exception.UserNotFoundException;
 import br.com.challengeaccepted.exception.WrongLoginException;
@@ -25,17 +28,22 @@ public class ChallengeAPI {
 	private static final String RESOURCE = "/challenge";
 	
 	private ChallengeAPI() {}
-	
-	public static Challenge createChallenge(String description, String senderId,
-			String receiverId, String challengeBaseId, int reward)
-			 throws NoConnectionException, UserExistsException {
 
+	public static Challenge createChallenge(String description, String receiverId) 
+			throws NoConnectionException, UnauthorizedException{
+	    return createChallenge(description, receiverId, 0);
+	}
+	
+	public static Challenge createChallenge(String description, String receiverId, int reward)
+			 throws NoConnectionException, UnauthorizedException {
+
+		String auth = Session.getSession().getSessionUser().getAuthenticationToken();
+		
 		JSONObject json = new JSONObject();
+		
 		try {
 			json.put("description", description);
-			json.put("senderId", senderId);
 			json.put("receiverId", receiverId);
-			json.put("challengeBaseId", challengeBaseId);
 			json.put("reward", reward);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -46,7 +54,8 @@ public class ChallengeAPI {
 				APICommons.createHeader(APIHeader.API_VERSIONING),
 				APICommons.createHeader(APIHeader.CONTENT_TYPE),
 				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
-				APICommons.createHeader(APIHeader.USER_AGENT));
+				APICommons.createHeader(APIHeader.USER_AGENT),
+				APICommons.createHeader(APIHeader.USER_AUTHENTICATION, auth));
 			
 		if (response == null)
 			throw new NoConnectionException();
@@ -61,48 +70,41 @@ public class ChallengeAPI {
 				e.printStackTrace();
 			}
 		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNPROCESSABLE_ENTITY){
-			throw new UserExistsException();
+			throw new UnauthorizedException();
 		}
 
 		return null;
 	}	
 	
-	public static User login(String email, String password)
-			 throws NoConnectionException, UserNotFoundException, WrongLoginException {
+	public static ArrayList<Challenge> sentChallenges()
+			 throws NoConnectionException, UnauthorizedException {
 		
-		String LOGIN_RESOURCE = "/user/auth";
+		String GET_CHALLENGES_RESOURCE = "/challenge/sent";
+		
+		String auth = Session.getSession().getSessionUser().getAuthenticationToken();
 
-		JSONObject json = new JSONObject();
-		try {
-			json.put("email", email);
-			json.put("password", password);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-			
-		HttpResponse response = WebserviceActions.doPost(Constants.PROTOCOL, Constants.HOST,
-				Constants.PORT, LOGIN_RESOURCE, json,
+		HttpResponse response = WebserviceActions.doGet(Constants.PROTOCOL, Constants.HOST,
+				Constants.PORT, GET_CHALLENGES_RESOURCE, null,
 				APICommons.createHeader(APIHeader.API_VERSIONING),
 				APICommons.createHeader(APIHeader.CONTENT_TYPE),
 				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
-				APICommons.createHeader(APIHeader.USER_AGENT));
+				APICommons.createHeader(APIHeader.USER_AGENT),
+				APICommons.createHeader(APIHeader.USER_AUTHENTICATION, auth));
 			
 		if (response == null)
 			throw new NoConnectionException();
 		
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			try {
-				User contact = UserModel.loadFromJSON(EntityUtils.toString(response.getEntity()));
-				return contact;
+				ArrayList<Challenge> challenges = ChallengeModel.parseChallengeArray(EntityUtils.toString(response.getEntity()));
+				return challenges;
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNPROCESSABLE_ENTITY){
-			throw new UserNotFoundException();
-		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST) {
-			throw new WrongLoginException();
+			throw new UnauthorizedException();
 		}
 
 		return null;

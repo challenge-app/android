@@ -1,6 +1,7 @@
 package br.com.challengeaccepted.api;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -11,7 +12,9 @@ import org.json.JSONObject;
 
 import br.com.challengeaccepted.bean.User;
 import br.com.challengeaccepted.commons.Constants;
+import br.com.challengeaccepted.commons.Session;
 import br.com.challengeaccepted.exception.NoConnectionException;
+import br.com.challengeaccepted.exception.UnauthorizedException;
 import br.com.challengeaccepted.exception.UserExistsException;
 import br.com.challengeaccepted.exception.UserNotFoundException;
 import br.com.challengeaccepted.exception.WrongLoginException;
@@ -23,6 +26,40 @@ public class UserAPI {
 	private static final String RESOURCE = "/user";
 	
 	private UserAPI() {}
+	
+	public static ArrayList<User> getFriends()
+			throws NoConnectionException, UnauthorizedException {
+
+		String auth = Session.getSession().getSessionUser().getAuthenticationToken();
+		
+		String FRIENDS_RESOURCE = "/user/friends";
+		
+		HttpResponse response = WebserviceActions.doGet(Constants.PROTOCOL, Constants.HOST,
+				Constants.PORT, FRIENDS_RESOURCE, null,
+				APICommons.createHeader(APIHeader.API_VERSIONING),
+				APICommons.createHeader(APIHeader.CONTENT_TYPE),
+				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
+				APICommons.createHeader(APIHeader.USER_AGENT),
+				APICommons.createHeader(APIHeader.USER_AUTHENTICATION, auth));
+
+		if (response == null)
+			throw new NoConnectionException();
+		
+		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			try {
+				User user = UserModel.loadFromJSON(EntityUtils.toString(response.getEntity()));
+				return user.getFriends();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED){
+			throw new UnauthorizedException();
+		}
+
+		return null;
+	}
 	
 	public static User register(String email, String password)
 			 throws NoConnectionException, UserExistsException {

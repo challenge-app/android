@@ -1,11 +1,7 @@
 package br.com.challengeaccepted.commons;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
 import br.com.challengeaccepted.bean.User;
-import br.com.challengeaccepted.exception.NoConnectionException;
 import br.com.challengeaccepted.model.UserModel;
 
 public class Session {
