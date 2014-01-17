@@ -1258,7 +1258,8 @@ containing a value of this type.
         public static final int register_fail=0x7f0a0013;
         public static final int register_success=0x7f0a0012;
         public static final int registering=0x7f0a0010;
-        public static final int tab1_challenges=0x7f0a001b;
+        public static final int tab1_feed=0x7f0a001b;
+        public static final int tab2_friends=0x7f0a001c;
         public static final int user_exists=0x7f0a0015;
         public static final int wrong_login_or_password=0x7f0a0014;
     }

@@ -368,7 +368,8 @@ int string register 0x7f0a0019
 int string register_fail 0x7f0a0013
 int string register_success 0x7f0a0012
 int string registering 0x7f0a0010
-int string tab1_challenges 0x7f0a001b
+int string tab1_feed 0x7f0a001b
+int string tab2_friends 0x7f0a001c
 int string user_exists 0x7f0a0015
 int string wrong_login_or_password 0x7f0a0014
 int style AppBaseTheme 0x7f0b007f
