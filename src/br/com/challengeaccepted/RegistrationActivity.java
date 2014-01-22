@@ -78,6 +78,7 @@ public class RegistrationActivity extends ActionBarActivity {
 				return null;
 			}
 			
+			@Override
 			protected void onPostExecute(User result) {
 				if (progressDialog != null) {
 					progressDialog.dismiss();

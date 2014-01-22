@@ -2,50 +2,67 @@ package br.com.challengeaccepted.bean;
 
 import java.io.Serializable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Challenge implements Serializable {
 
 	private static final long serialVersionUID = 9172414403611430871L;
+
+	@SerializedName("_id")
+	private String id;
+
+	private ChallengeInfo info;
 	
-	private String description;
-	private String senderId;
-	private String receiverId;
-	private String challengeBaseId;
-	private int votes;
+	private User sender;
+	private User receiver;
+	
 	private int reward;
+	private int votes;
 	
-	public String getDescription() {
-		return description;
+	public String getId() {
+		return id;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	
+	public void setId(String id) {
+		this.id = id;
 	}
-	public String getSenderId() {
-		return senderId;
+	
+	public ChallengeInfo getInfo() {
+		return info;
 	}
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
+	
+	public void setInfo(ChallengeInfo info) {
+		this.info = info;
 	}
-	public String getReceiverId() {
-		return receiverId;
+	
+	public User getSender() {
+		return sender;
 	}
-	public void setReceiverId(String receiverId) {
-		this.receiverId = receiverId;
+	
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
-	public String getChallengeBaseId() {
-		return challengeBaseId;
+	
+	public User getReceiver() {
+		return receiver;
 	}
-	public void setChallengeBaseId(String challengeBaseId) {
-		this.challengeBaseId = challengeBaseId;
+	
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
 	}
+	
 	public int getReward() {
 		return reward;
 	}
+	
 	public void setReward(int reward) {
 		this.reward = reward;
 	}
+	
 	public int getVotes() {
 		return votes;
 	}
+	
 	public void setVotes(int votes) {
 		this.votes = votes;
 	}	

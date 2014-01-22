@@ -24,7 +24,6 @@ public class MainActivity extends ActionBarActivity {
 		
 		// Set the pager with an adapter
 		pager.setAdapter(new TabViewPagerAdapter(getSupportFragmentManager(), MainActivity.this));
-		pager.setOffscreenPageLimit(1);
 		
 		// Bind the widget to the adapter
 		tabs.setViewPager(pager);

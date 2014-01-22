@@ -46,6 +46,7 @@ public class UserModel {
 	}
 	
 	public static User loadFromJSON(String jsonString) {
+		System.out.println(jsonString);
 		Gson gson = new Gson();
 		User contact = gson.fromJson(jsonString, User.class);
 		return contact;

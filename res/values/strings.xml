@@ -15,7 +15,8 @@
     <string name="login">Login</string>
     <string name="register">Registrar-se</string>
     <string name="fill_all_blanks">Preencha todos os campos.</string>
-    <string name="tab1_feed">Feed</string>
-    <string name="tab2_friends">Desafiar Amigos</string>
+    <string name="tab1_challenges">Feed</string>
+    <string name="tab2_challenges">Desafiar amigos</string>
+    <string name="search">Procurar</string>
 
 </resources>

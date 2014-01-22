@@ -7,9 +7,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import br.com.challengeaccepted.LoginActivity;
 import br.com.challengeaccepted.R;
 import br.com.challengeaccepted.bean.User;
 
@@ -21,6 +25,8 @@ public class FriendsAdapter extends BaseAdapter {
 	
 	private class ViewHolder {
 		TextView nameTextView;
+		EditText edtEmail;
+		Button btnSearch;
 	}
 	
 	public FriendsAdapter(ArrayList<User> friends, Context context) {
@@ -58,6 +64,29 @@ public class FriendsAdapter extends BaseAdapter {
 			// Mapear componentes
 			holder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
 			convertView.setTag(holder);
+
+			holder.btnSearch = (Button) convertView.findViewById(R.id.btnSearch);
+			holder.edtEmail = (EditText) convertView.findViewById(R.id.edtEmail);
+			
+			holder.btnSearch.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					String email = holder.edtEmail.getText().toString();
+					
+					if (holder.edtEmail.getText().length() != 0)
+					{
+						//TODO
+					}
+					else
+					{
+						Toast.makeText(context, "Insira um email!",
+								Toast.LENGTH_SHORT).show();
+					}
+				}
+				
+			});
 			
 		} else {  
 		      holder = (ViewHolder)convertView.getTag();  

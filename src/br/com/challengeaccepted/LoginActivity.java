@@ -87,11 +87,12 @@ public class LoginActivity extends ActionBarActivity {
 				} catch (UserNotFoundException e) {
 					this.e = e;
 				} catch (WrongLoginException e) {
-					this.e = e;;
+					this.e = e;
 				} 
 				return null;
 			}
 			
+			@Override
 			protected void onPostExecute(User result) {
 				if (progressDialog != null) {
 					progressDialog.dismiss();

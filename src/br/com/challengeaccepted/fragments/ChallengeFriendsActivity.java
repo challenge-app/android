@@ -14,9 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import br.com.challengeaccepted.R;
-import br.com.challengeaccepted.adapter.FriendsAdapter;
-import br.com.challengeaccepted.api.FriendAPI;
-import br.com.challengeaccepted.bean.User;
+import br.com.challengeaccepted.adapter.ChallengesAdapter;
+import br.com.challengeaccepted.api.ChallengeAPI;
+import br.com.challengeaccepted.bean.Challenge;
 import br.com.challengeaccepted.exception.NoConnectionException;
 import br.com.challengeaccepted.exception.UnauthorizedException;
 
@@ -27,7 +27,7 @@ public class ChallengeFriendsActivity extends ListFragment {
 	private ListView listView;
 	private LinearLayout loadingLayout;
 	private Context context;
-	private AsyncGetFriends asyncGetFriends;
+	private AsyncGetSentChallenges asyncGetSentChallenges;
 		
 	public ChallengeFriendsActivity(){}
 	
@@ -47,24 +47,24 @@ public class ChallengeFriendsActivity extends ListFragment {
                
         listView = (ListView) getView().findViewById(android.R.id.list);
 
-        asyncGetFriends = new AsyncGetFriends(context);
-        asyncGetFriends.execute();
+        asyncGetSentChallenges = new AsyncGetSentChallenges(context);
+        asyncGetSentChallenges.execute();
 
     }
     
     @Override
 	public void onDetach() {
-		if(asyncGetFriends != null && asyncGetFriends.getStatus() != AsyncTask.Status.FINISHED){
-			asyncGetFriends.cancel(true);
+		if(asyncGetSentChallenges != null && asyncGetSentChallenges.getStatus() != AsyncTask.Status.FINISHED){
+			asyncGetSentChallenges.cancel(true);
 		}
 		super.onDetach();
 	}
     
-    public class AsyncGetFriends extends AsyncTask<Void, Void, ArrayList<User>> {
+    public class AsyncGetSentChallenges extends AsyncTask<Void, Void, ArrayList<Challenge>> {
     	private Context context;
     	private Exception e;
 
-    	public AsyncGetFriends(Context context) {
+    	public AsyncGetSentChallenges(Context context) {
     		this.context = context;
     	}
     	
@@ -72,20 +72,19 @@ public class ChallengeFriendsActivity extends ListFragment {
 		protected void onPreExecute() {}
     	
     	@Override
-		protected ArrayList<User> doInBackground(Void... params) {
-			ArrayList<User> friends = null;
+		protected ArrayList<Challenge> doInBackground(Void... params) {
+			ArrayList<Challenge> challenges = null;
 			try {
-				friends = FriendAPI.getFriends();
+				challenges = ChallengeAPI.sentChallenges();
 			} catch (NoConnectionException e) {
 				this.e = e;
 			} catch (UnauthorizedException e) {
 				this.e = e;
 			}
-			return friends;
+			return challenges;
 		}
 
-		@Override
-		protected void onPostExecute(ArrayList<User> result) {
+		protected void onPostExecute(ArrayList<Challenge> result) {
 			if (!isCancelled() && isAdded()){
 				if (e instanceof NoConnectionException) {
 					Toast.makeText(context, getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
@@ -95,7 +94,7 @@ public class ChallengeFriendsActivity extends ListFragment {
 				} else {
 					if (result != null) {		
 						listView.setVisibility(View.VISIBLE);
-						setListAdapter(new FriendsAdapter (result, context));
+						setListAdapter(new ChallengesAdapter (result, context));
 					}
 				}
 			}

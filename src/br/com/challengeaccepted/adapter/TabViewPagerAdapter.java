@@ -5,12 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import br.com.challengeaccepted.R;
-import br.com.challengeaccepted.fragments.ChallengeFriendsActivity;
+import br.com.challengeaccepted.fragments.*;
 
 public class TabViewPagerAdapter extends FragmentStatePagerAdapter {
 	 
     private final int PAGES = 2;
-    private String[] titles = {"Feed", "Friends"};
+    private String titles[] = {"",""};
     private Context ctx;
  
     public TabViewPagerAdapter(FragmentManager fm, Context context) {
@@ -18,8 +18,8 @@ public class TabViewPagerAdapter extends FragmentStatePagerAdapter {
         this.ctx = context;
         
         // Initialize Tabs Titles
-        titles[0] = context.getString(R.string.tab1_feed);
-        titles[1] = context.getString(R.string.tab2_friends);
+        titles[0] = context.getString(R.string.tab1_challenges);
+        titles[1] = context.getString(R.string.tab2_challenges);
     }
  
     @Override
@@ -28,7 +28,7 @@ public class TabViewPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return new ChallengeFriendsActivity(ctx);
             case 1:
-                return new ChallengeFriendsActivity(ctx);
+            	return new FriendsFragment(ctx);
             default:
                 throw new IllegalArgumentException("The item position should be less or equal to:" + PAGES);
         }
