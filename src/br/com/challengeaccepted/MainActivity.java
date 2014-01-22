@@ -17,10 +17,8 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		
-		pager = (SmoothScrollViewPager) findViewById(R.id.pager);
-		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		initLayout();
 		
 		// Set the pager with an adapter
 		pager.setAdapter(new TabViewPagerAdapter(getSupportFragmentManager(), MainActivity.this));
@@ -28,6 +26,13 @@ public class MainActivity extends ActionBarActivity {
 		// Bind the widget to the adapter
 		tabs.setViewPager(pager);
 		tabs.setShouldExpand(true);
+	}
+
+	private void initLayout() {
+		setContentView(R.layout.activity_main);
+		
+		pager = (SmoothScrollViewPager) findViewById(R.id.pager);
+		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 	}
 
 	@Override

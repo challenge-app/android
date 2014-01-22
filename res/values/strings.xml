@@ -8,6 +8,7 @@
     <string name="login_success">Logado com sucesso!</string>
     <string name="register_success">Registrado com sucesso!</string>
     <string name="register_fail">Ocorreu um erro no registro. Tente novamente.</string>
+    <string name="fail_try_again">Erro. Tente novamente.</string>
     <string name="wrong_login_or_password">Email ou senha incorretos.</string>
     <string name="user_exists">Este usuário já está cadastrado.</string>
     <string name="login_fail">Erro ao efetuar login. Tente novamente.</string>
@@ -15,8 +16,10 @@
     <string name="login">Login</string>
     <string name="register">Registrar-se</string>
     <string name="fill_all_blanks">Preencha todos os campos.</string>
-    <string name="tab1_challenges">Feed</string>
+    <string name="tab1_feed">Feed</string>
     <string name="tab2_challenges">Desafiar amigos</string>
     <string name="search">Procurar</string>
-
+    <string name="user_not_found">Usuário não encontrado.</string>
+	<string name="plus">+</string>
+    
 </resources>

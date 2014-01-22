@@ -30,13 +30,13 @@ public class LoginActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-//		Session.getSession().loadSessionUser(LoginActivity.this);
-//		if (Session.getSession().loggedIn()){
-//			Intent i = new Intent(LoginActivity.this, MainActivity.class);
-//			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//			startActivity(i);
-//			finish();
-//		}
+		Session.getSession().loadSessionUser(LoginActivity.this);
+		if (Session.getSession().loggedIn()){
+			Intent i = new Intent(LoginActivity.this, MainActivity.class);
+			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			finish();
+		}
 		
 		mapLayoutComponents();
 		

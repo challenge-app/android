@@ -1,31 +1,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
     tools:context=".MainActivity" >
     
     <TextView 
         android:id="@+id/nameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.85"
         android:layout_margin="10dp" />
     
-    <EditText 
-        android:id="@+id/edtEmail"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnAddFriend"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
-    
-    <Button 
-        android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="@string/search" />
+        android:layout_weight="0.15"
+        android:text="@string/plus"
+        android:layout_margin="10dp"
+        android:visibility="gone" />
 
 </LinearLayout>

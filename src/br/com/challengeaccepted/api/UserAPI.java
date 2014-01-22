@@ -24,6 +24,7 @@ import br.com.challengeaccepted.webservice.WebserviceActions;
 public class UserAPI {
 
 	private static final String RESOURCE = "/user";
+	private static final String RESOURCE_FRIEND = "/user/friend";
 	private static final String RESOURCE_FRIENDS = "/user/friends";
 	private static final String RESOURCE_FIND = "/user/find";
 	private static final String RESOURCE_AUTH = "/user/auth";
@@ -62,7 +63,7 @@ public class UserAPI {
 		return null;
 	}
 	
-	public static User getUserByEmail(String email)
+	public static ArrayList<User> getUserByEmail(String email)
 			throws NoConnectionException, UserNotFoundException {
 		
 		JSONObject json = new JSONObject();
@@ -85,8 +86,8 @@ public class UserAPI {
 		
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			try {
-				User user = UserModel.loadFromJSON(EntityUtils.toString(response.getEntity()));
-				return user;
+				ArrayList<User> result = UserModel.parseContactArray(EntityUtils.toString(response.getEntity()));
+				return result;
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -95,12 +96,55 @@ public class UserAPI {
 		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
 			throw new UserNotFoundException();
 		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST) {
-			//TODO
+			return null;
 		}
 		
 		return null;
 	}
 	
+	public static ArrayList<User> addFriend(String id)
+			throws NoConnectionException, UserNotFoundException {
+		
+		JSONObject json = new JSONObject();
+		String auth = Session.getSession().getSessionUser().getAuthenticationToken();
+		
+		try {
+			json.put("_id", id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		HttpResponse response = WebserviceActions.doPost(Constants.PROTOCOL, Constants.HOST,
+				Constants.PORT, RESOURCE_FRIEND, json,
+				APICommons.createHeader(APIHeader.API_VERSIONING),
+				APICommons.createHeader(APIHeader.CONTENT_TYPE),
+				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
+				APICommons.createHeader(APIHeader.USER_AGENT),
+				APICommons.createHeader(APIHeader.USER_AUTHENTICATION, auth));
+
+		if (response == null)
+			throw new NoConnectionException();
+		
+		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			try {
+				User result = UserModel.loadFromJSON(EntityUtils.toString(response.getEntity()));
+				return result.getFriends();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+			// TODO: login
+		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST) {
+			return null;
+		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNPROCESSABLE_ENTITY) {
+			throw new UserNotFoundException();
+		}
+		
+		return null;
+	}
+		
 	public static User register(String email, String password)
 			 throws NoConnectionException, UserExistsException {
 

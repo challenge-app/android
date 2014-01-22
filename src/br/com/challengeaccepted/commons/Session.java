@@ -31,7 +31,7 @@ public class Session {
 
 	
 	public boolean loggedIn() {
-		return (getSessionUser() != null);
+		return (getSessionUser() != null) && (getSessionUser().getId() != null);
 	}
 	
 	

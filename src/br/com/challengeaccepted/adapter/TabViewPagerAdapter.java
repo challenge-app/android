@@ -18,7 +18,7 @@ public class TabViewPagerAdapter extends FragmentStatePagerAdapter {
         this.ctx = context;
         
         // Initialize Tabs Titles
-        titles[0] = context.getString(R.string.tab1_challenges);
+        titles[0] = context.getString(R.string.tab1_feed);
         titles[1] = context.getString(R.string.tab2_challenges);
     }
  
@@ -26,9 +26,9 @@ public class TabViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ChallengeFriendsActivity(ctx);
+                return new FeedFragment(ctx);
             case 1:
-            	return new FriendsFragment(ctx);
+            	return new ChallengeFriendsFragment(ctx);
             default:
                 throw new IllegalArgumentException("The item position should be less or equal to:" + PAGES);
         }

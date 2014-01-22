@@ -16,22 +16,27 @@ import android.widget.Toast;
 import br.com.challengeaccepted.LoginActivity;
 import br.com.challengeaccepted.R;
 import br.com.challengeaccepted.bean.User;
+import br.com.challengeaccepted.fragments.ChallengeFriendsFragment;
 
 @SuppressLint("NewApi")
 public class FriendsAdapter extends BaseAdapter {
 	
 	private ArrayList<User> friends;
 	private Context context;
+	private boolean isSearchResult;
+	private ChallengeFriendsFragment challengeFriendsFragment;
 	
 	private class ViewHolder {
 		TextView nameTextView;
-		EditText edtEmail;
-		Button btnSearch;
+		Button btnAddFriend;
 	}
 	
-	public FriendsAdapter(ArrayList<User> friends, Context context) {
+	public FriendsAdapter(ArrayList<User> friends, Context context, boolean isSearchResult,
+			ChallengeFriendsFragment challengeFriendsFragment) {
 		this.friends = friends;
 		this.context = context;
+		this.isSearchResult = isSearchResult;
+		this.challengeFriendsFragment = challengeFriendsFragment;
     }
 
 	@Override
@@ -57,42 +62,32 @@ public class FriendsAdapter extends BaseAdapter {
 		if (convertView == null)
 		{
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_listview_friends, parent, false);
-			//	convertView = LayoutInflater.from(context).inflate(R.layout.item_messages_listview, null);
 			holder = new ViewHolder();
-			//	convertView.setTag("cv" + position);
 			
 			// Mapear componentes
 			holder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-			convertView.setTag(holder);
-
-			holder.btnSearch = (Button) convertView.findViewById(R.id.btnSearch);
-			holder.edtEmail = (EditText) convertView.findViewById(R.id.edtEmail);
+			holder.btnAddFriend = (Button) convertView.findViewById(R.id.btnAddFriend);
 			
-			holder.btnSearch.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					
-					String email = holder.edtEmail.getText().toString();
-					
-					if (holder.edtEmail.getText().length() != 0)
-					{
-						//TODO
-					}
-					else
-					{
-						Toast.makeText(context, "Insira um email!",
-								Toast.LENGTH_SHORT).show();
-					}
-				}
-				
-			});
+			convertView.setTag(holder);
 			
 		} else {  
 		      holder = (ViewHolder)convertView.getTag();  
 		}  
 		
 		holder.nameTextView.setText(friend.getEmail());
+		
+		if(isSearchResult){
+			holder.btnAddFriend.setVisibility(View.VISIBLE);
+			
+			holder.btnAddFriend.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					ChallengeFriendsFragment.addFriend(challengeFriendsFragment, ((User) getItem(position)).getId());
+				}
+			});
+		} else {
+			holder.btnAddFriend.setVisibility(View.GONE);
+		}
 		
 		return convertView;
 	}
