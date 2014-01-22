@@ -1,3 +1,4 @@
+# Sublimt SFTP Plugin Config
 sftp-config.json
 
 # built application files
@@ -20,4 +21,4 @@ local.properties
 # Eclipse project files
 .classpath
 .project
->>>>>>> 9b656a4ee3346043cb6ea9ccdc6a14abba98d6de
+
