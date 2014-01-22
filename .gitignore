@@ -1,1 +1,23 @@
 sftp-config.json
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Eclipse project files
+.classpath
+.project
+>>>>>>> 9b656a4ee3346043cb6ea9ccdc6a14abba98d6de
