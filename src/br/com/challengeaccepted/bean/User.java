@@ -14,7 +14,13 @@ public class User implements Serializable {
 	private String email;
 	private String password;
 	private String authenticationToken;
-	private ArrayList<User> friends;
+	private String firstName;
+	private String lastName;
+	private String username;
+	private String phone;
+	private ArrayList<User> following;
+	private ArrayList<User> followers;
+	private boolean isSelected;
 	
 	public String getId() {
 		return id;
@@ -40,11 +46,47 @@ public class User implements Serializable {
 	public void setAuthenticationToken(String authenticationToken) {
 		this.authenticationToken = authenticationToken;
 	}
-	public ArrayList<User> getFriends() {
-		return friends;
+	public boolean isSelected() {
+		return isSelected;
 	}
-	public void setFriends(ArrayList<User> friends) {
-		this.friends = friends;
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public ArrayList<User> getFollowing() {
+		return following;
+	}
+	public void setFollowing(ArrayList<User> following) {
+		this.following = following;
+	}
+	public ArrayList<User> getFollowers() {
+		return followers;
+	}
+	public void setFollowers(ArrayList<User> followers) {
+		this.followers = followers;
 	}
 	
 }

@@ -4,6 +4,6 @@
     <item
         android:id="@+id/menu_challenge"
         br.com.challengeaccepted:showAsAction="always"
-        android:icon="@drawable/challenge" />
+        android:icon="@drawable/ic_accept" />
 
 </menu>

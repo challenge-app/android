@@ -14,24 +14,24 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import br.com.challengeaccepted.R;
-import br.com.challengeaccepted.adapter.FeedAdapter;
-import br.com.challengeaccepted.api.FeedAPI;
-import br.com.challengeaccepted.bean.Feed;
+import br.com.challengeaccepted.adapter.RandomChallengesAdapter;
+import br.com.challengeaccepted.api.ChallengeAPI;
+import br.com.challengeaccepted.bean.Challenge;
 import br.com.challengeaccepted.exception.NoConnectionException;
 import br.com.challengeaccepted.exception.UnauthorizedException;
 
 @SuppressLint("ValidFragment")
-public class FeedFragment extends ListFragment {
+public class RankingFragment extends ListFragment {
 
 	// Layout Variables
 	private ListView listView;
 	private LinearLayout loadingLayout;
 	private Context context;
-	private AsyncGetReceivedChallenges asyncGetReceivedChallenges;
+	private AsyncGetSentChallenges asyncGetSentChallenges;
 		
-	public FeedFragment(){}
+	public RankingFragment(){}
 	
-	public FeedFragment(Context context) {
+	public RankingFragment(Context context) {
 		this.context = context;
 	}
 	
@@ -47,59 +47,58 @@ public class FeedFragment extends ListFragment {
                
         listView = (ListView) getView().findViewById(android.R.id.list);
 
-        asyncGetReceivedChallenges = new AsyncGetReceivedChallenges(context);
-        asyncGetReceivedChallenges.execute();
+//        asyncGetSentChallenges = new AsyncGetSentChallenges(context);
+//        asyncGetSentChallenges.execute();
 
     }
     
     @Override
 	public void onDetach() {
-		if(asyncGetReceivedChallenges != null && asyncGetReceivedChallenges.getStatus() != AsyncTask.Status.FINISHED){
-			asyncGetReceivedChallenges.cancel(true);
+		if(asyncGetSentChallenges != null && asyncGetSentChallenges.getStatus() != AsyncTask.Status.FINISHED){
+			asyncGetSentChallenges.cancel(true);
 		}
 		super.onDetach();
 	}
     
-    public class AsyncGetReceivedChallenges extends AsyncTask<Void, Void, ArrayList<Feed>> {
+    public class AsyncGetSentChallenges extends AsyncTask<Void, Void, ArrayList<Challenge>> {
     	private Context context;
     	private Exception e;
 
-    	public AsyncGetReceivedChallenges(Context context) {
+    	public AsyncGetSentChallenges(Context context) {
     		this.context = context;
     	}
     	
 		@Override
-		protected void onPreExecute() { }
+		protected void onPreExecute() {}
     	
     	@Override
-		protected ArrayList<Feed> doInBackground(Void... params) {
-			ArrayList<Feed> feed = null;
+		protected ArrayList<Challenge> doInBackground(Void... params) {
+			ArrayList<Challenge> challenges = null;
 			try {
-				feed = FeedAPI.getReceivedChallenges();
+				challenges = ChallengeAPI.sentChallenges();
 			} catch (NoConnectionException e) {
 				this.e = e;
 			} catch (UnauthorizedException e) {
 				this.e = e;
 			}
-			return feed;
+			return challenges;
 		}
 
-		protected void onPostExecute(ArrayList<Feed> result) {
-			
+		protected void onPostExecute(ArrayList<Challenge> result) {
 			if (!isCancelled() && isAdded()){
 				if (e instanceof NoConnectionException) {
-//					loadingLayout.setVisibility(View.GONE);
+					Toast.makeText(context, getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
+					loadingLayout.setVisibility(View.GONE);
 				} else if (e instanceof UnauthorizedException) {
-//	            	   Toast.makeText(context, "UNAUTHORIZED", Toast.LENGTH_SHORT).show();
 					// TODO: login
 				} else {
-					if (result != null) {
+					if (result != null) {		
 						listView.setVisibility(View.VISIBLE);
-						setListAdapter(new FeedAdapter(result, context));
+//						setListAdapter(new ChallengesAdapter (result, context));
 					}
 				}
 			}
 		}
 	} 
-        
+    
 }

@@ -1,0 +1,64 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+		
+		    <TextView
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/choose_challenge"
+		        android:layout_marginTop="10dp"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textSize="18dp" />
+		
+		    <ListView
+		        android:id="@+id/challengeList"
+		        android:layout_width="match_parent"
+		        android:layout_height="190dp"
+		        android:layout_margin="10dp" />
+		    
+		    <TextView
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/custom_challenge"
+		        android:gravity="center"
+		        android:layout_marginLeft="10dp"
+		        android:layout_marginRight="10dp"
+		        android:textSize="18dp" />
+		    
+		    <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+			<LinearLayout
+			    android:focusable="true" android:focusableInTouchMode="true"
+			    android:layout_width="0px" android:layout_height="0px"/>
+		    
+		    <EditText
+		        android:id="@+id/edtCustomChallenge"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:lines="2"
+		        android:maxLines="2"
+		        android:hint="@string/custom_challenge_hint"
+		        android:layout_margin="10dp"
+		        android:textSize="18dp"
+		        android:nextFocusUp="@id/edtCustomChallenge"
+		        android:nextFocusLeft="@id/edtCustomChallenge" />
+		    
+		    <Button
+		        android:id="@+id/btnSendChallenge"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center"
+		        android:layout_margin="10dp"
+		        android:hint="@string/challenge"
+		        android:textSize="18dp" />
+		    
+	    </LinearLayout>
+
+</ScrollView>

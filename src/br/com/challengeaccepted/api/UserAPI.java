@@ -24,20 +24,52 @@ import br.com.challengeaccepted.webservice.WebserviceActions;
 public class UserAPI {
 
 	private static final String RESOURCE = "/user";
-	private static final String RESOURCE_FRIEND = "/user/friend";
-	private static final String RESOURCE_FRIENDS = "/user/friends";
+	private static final String RESOURCE_FOLLOW = "/user/follow";
+	private static final String RESOURCE_FOLLOWING = "/user/following";
+	private static final String RESOURCE_FOLLOWERS = "/user/followers";
 	private static final String RESOURCE_FIND = "/user/find";
 	private static final String RESOURCE_AUTH = "/user/auth";
 	
 	private UserAPI() {}
 	
-	public static ArrayList<User> getFriends()
+	public static ArrayList<User> getFollowers()
 			throws NoConnectionException, UnauthorizedException {
 
 		String auth = Session.getSession().getSessionUser().getAuthenticationToken();
 		
 		HttpResponse response = WebserviceActions.doGet(Constants.PROTOCOL, Constants.HOST,
-				Constants.PORT, RESOURCE_FRIENDS, null,
+				Constants.PORT, RESOURCE_FOLLOWERS, null,
+				APICommons.createHeader(APIHeader.API_VERSIONING),
+				APICommons.createHeader(APIHeader.CONTENT_TYPE),
+				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
+				APICommons.createHeader(APIHeader.USER_AGENT),
+				APICommons.createHeader(APIHeader.USER_AUTHENTICATION, auth));
+
+		if (response == null)
+			throw new NoConnectionException();
+		
+		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+			try {
+				return UserModel.parseContactArray(EntityUtils.toString(response.getEntity()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED){
+			throw new UnauthorizedException();
+		}
+
+		return null;
+	}
+	
+	public static ArrayList<User> getFollowing()
+			throws NoConnectionException, UnauthorizedException {
+
+		String auth = Session.getSession().getSessionUser().getAuthenticationToken();
+		
+		HttpResponse response = WebserviceActions.doGet(Constants.PROTOCOL, Constants.HOST,
+				Constants.PORT, RESOURCE_FOLLOWING, null,
 				APICommons.createHeader(APIHeader.API_VERSIONING),
 				APICommons.createHeader(APIHeader.CONTENT_TYPE),
 				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
@@ -50,7 +82,7 @@ public class UserAPI {
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			try {
 				User user = UserModel.loadFromJSON(EntityUtils.toString(response.getEntity()));
-				return user.getFriends();
+				return user.getFollowers();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -66,10 +98,12 @@ public class UserAPI {
 	public static ArrayList<User> getUserByEmail(String email)
 			throws NoConnectionException, UserNotFoundException {
 		
+		String authToken = Session.getSession().getSessionUser().getAuthenticationToken();
+		
 		JSONObject json = new JSONObject();
 		
 		try {
-			json.put("email", email);
+			json.put("query", email);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -79,7 +113,8 @@ public class UserAPI {
 				APICommons.createHeader(APIHeader.API_VERSIONING),
 				APICommons.createHeader(APIHeader.CONTENT_TYPE),
 				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
-				APICommons.createHeader(APIHeader.USER_AGENT));
+				APICommons.createHeader(APIHeader.USER_AGENT),
+				APICommons.createHeader(APIHeader.API_AUTHENTICATION, authToken));
 
 		if (response == null)
 			throw new NoConnectionException();
@@ -102,7 +137,7 @@ public class UserAPI {
 		return null;
 	}
 	
-	public static ArrayList<User> addFriend(String id)
+	public static ArrayList<User> follow(String id)
 			throws NoConnectionException, UserNotFoundException {
 		
 		JSONObject json = new JSONObject();
@@ -115,7 +150,7 @@ public class UserAPI {
 		}
 		
 		HttpResponse response = WebserviceActions.doPost(Constants.PROTOCOL, Constants.HOST,
-				Constants.PORT, RESOURCE_FRIEND, json,
+				Constants.PORT, RESOURCE_FOLLOW, json,
 				APICommons.createHeader(APIHeader.API_VERSIONING),
 				APICommons.createHeader(APIHeader.CONTENT_TYPE),
 				APICommons.createHeader(APIHeader.API_AUTHENTICATION),
@@ -127,8 +162,7 @@ public class UserAPI {
 		
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			try {
-				User result = UserModel.loadFromJSON(EntityUtils.toString(response.getEntity()));
-				return result.getFriends();
+				return UserModel.parseContactArray(EntityUtils.toString(response.getEntity()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

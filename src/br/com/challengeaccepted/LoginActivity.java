@@ -14,6 +14,7 @@ import android.widget.Toast;
 import br.com.challengeaccepted.api.UserAPI;
 import br.com.challengeaccepted.bean.User;
 import br.com.challengeaccepted.commons.Session;
+import br.com.challengeaccepted.db.BancoCreate;
 import br.com.challengeaccepted.exception.NoConnectionException;
 import br.com.challengeaccepted.exception.UserNotFoundException;
 import br.com.challengeaccepted.exception.WrongLoginException;
@@ -64,7 +65,7 @@ public class LoginActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
+//		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
 	
@@ -108,12 +109,16 @@ public class LoginActivity extends ActionBarActivity {
 					i.putExtra("email", email);
 					i.putExtra("password", password);
 					startActivity(i);
+					Toast.makeText(LoginActivity.this, getString(R.string.user_not_found_please_register),
+							Toast.LENGTH_SHORT).show();
 				// Usuario ou senha incorretos
 				} else if (e instanceof WrongLoginException){
 					Toast.makeText(LoginActivity.this, getString(R.string.wrong_login_or_password),
 							Toast.LENGTH_SHORT).show();
 				} else {
 					if (result != null){
+						BancoCreate bd = new BancoCreate(LoginActivity.this);
+						bd.setFriends(result);
 						Toast.makeText(LoginActivity.this, getString(R.string.login_success),
 								Toast.LENGTH_SHORT).show();
 						Session.getSession().login(result, LoginActivity.this);

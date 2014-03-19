@@ -5,13 +5,26 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="17" />
     
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.STORAGE" /> 
+    
+	<uses-feature android:name="android.hardware.camera" />
+	<uses-feature android:name="android.hardware.camera.autofocus" />
+    
+    <uses-feature android:name="android.hardware.camera"
+                  android:required="true" />
 
     <application
+        android:name="MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -20,13 +33,15 @@
         
         <activity
             android:name="br.com.challengeaccepted.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             
         </activity>
         
         <activity
             android:name="br.com.challengeaccepted.LoginActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,10 +53,34 @@
         
         <activity
             android:name="br.com.challengeaccepted.RegistrationActivity"
-            android:label="@string/app_name" >
-            
-        </activity>
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
         
+        <activity
+            android:name="br.com.challengeaccepted.ChooseFriendActivity"
+            android:label="@string/activity_choose_friend"
+            android:screenOrientation="portrait" />
+        
+        <activity
+            android:name="br.com.challengeaccepted.ChallengeActivity"
+            android:label="@string/activity_challenge"
+            android:screenOrientation="portrait" /> 
+            
+        <activity
+            android:name="br.com.challengeaccepted.ChallengeReplyActivity"
+            android:label="@string/activity_challenge"
+            android:screenOrientation="portrait" /> 
+            
+        <activity
+            android:name="br.com.challengeaccepted.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        
+        <activity
+            android:name="br.com.challengeaccepted.ChallengeDetailsActivity"
+            android:label="@string/activity_challenge"
+            android:screenOrientation="portrait" /> 
+            
     </application>
 
 </manifest>

@@ -9,24 +9,28 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import br.com.challengeaccepted.R;
 import br.com.challengeaccepted.bean.User;
+import br.com.challengeaccepted.fragments.ChallengeFriendsFragment;
 
 @SuppressLint("NewApi")
-public class FriendsAdapter extends BaseAdapter {
+public class UserSearchAdapter extends BaseAdapter {
 	
 	private ArrayList<User> friends;
+	private ChallengeFriendsFragment challengeFriendsFragment;
 	private Context context;
 	
 	private class ViewHolder {
 		TextView nameTextView;
-		CheckBox checkBox;
+		Button btnFollow;
 	}
 	
-	public FriendsAdapter(ArrayList<User> friends, Context context) {
+	public UserSearchAdapter(ArrayList<User> friends, ChallengeFriendsFragment challengeFriendsFragment, Context context) {
 		this.friends = friends;
+		this.challengeFriendsFragment = challengeFriendsFragment;
 		this.context = context;
     }
 
@@ -56,12 +60,12 @@ public class FriendsAdapter extends BaseAdapter {
 		
 		if (convertView == null)
 		{
-			convertView = LayoutInflater.from(context).inflate(R.layout.item_listview_friends, parent, false);
+			convertView = LayoutInflater.from(context).inflate(R.layout.item_listview_user_search, parent, false);
 			holder = new ViewHolder();
 			
 			// Mapear componentes
 			holder.nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
-			holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+			holder.btnFollow = (Button) convertView.findViewById(R.id.btnFollow);
 			
 			convertView.setTag(holder);
 			
@@ -71,20 +75,10 @@ public class FriendsAdapter extends BaseAdapter {
 		
 		holder.nameTextView.setText(friend.getEmail());
 		
-		holder.checkBox.setOnClickListener(new OnClickListener() {
+		holder.btnFollow.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				CheckBox cb = holder.checkBox;
-				friend.setSelected(cb.isChecked());
-			}
-		});
-		
-		holder.nameTextView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				CheckBox cb = holder.checkBox;
-				cb.setChecked(!cb.isChecked());
-				friend.setSelected(cb.isChecked());
+				ChallengeFriendsFragment.followUser(challengeFriendsFragment, ((User) getItem(position)).getId());
 			}
 		});
 				
