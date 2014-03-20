@@ -10,6 +10,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import br.com.challengeaccepted.bean.LoginResult;
 import br.com.challengeaccepted.bean.User;
 import br.com.challengeaccepted.commons.Constants;
 import br.com.challengeaccepted.commons.Session;
@@ -216,9 +217,10 @@ public class UserAPI {
 		return null;
 	}	
 	
-	public static User login(String email, String password)
+	public static LoginResult login(String email, String password)
 			 throws NoConnectionException, UserNotFoundException, WrongLoginException {
 
+		LoginResult result = new LoginResult();
 		JSONObject json = new JSONObject();
 		try {
 			json.put("email", email);
@@ -240,17 +242,26 @@ public class UserAPI {
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 			try {
 				User contact = UserModel.loadFromJSON(EntityUtils.toString(response.getEntity()));
-				return contact;
+				result.setResult(contact);
+				return result;
 			} catch (ParseException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNPROCESSABLE_ENTITY){
-			throw new UserNotFoundException();
-		} else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_BAD_REQUEST) {
-			throw new WrongLoginException();
-		}
+		} else {
+			try {
+				JSONObject jsonObj = new JSONObject(EntityUtils.toString(response.getEntity()));
+				result.setErrorMessage(String.valueOf(jsonObj.get("code")));
+				return result;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} 
 
 		return null;
 	}	

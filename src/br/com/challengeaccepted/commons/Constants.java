@@ -22,4 +22,9 @@ public class Constants {
 	public static final int STATUS_SEEN = 0;
 	public static final int STATUS_DONE = 1;
 	public static final int STATUS_REFUSES = 2;
+	
+	public static final int ERROR_USER_ALREADY_EXISTS = 9;
+	public static final int ERROR_PLEASE_SIGN_IN = 10;
+	public static final int ERROR_USER_NOT_FOUND = 11;
+	public static final int ERROR_PASSWORD_INCORRECT = 12;
 }

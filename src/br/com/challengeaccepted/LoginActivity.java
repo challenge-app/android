@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import br.com.challengeaccepted.api.UserAPI;
+import br.com.challengeaccepted.bean.LoginResult;
 import br.com.challengeaccepted.bean.User;
+import br.com.challengeaccepted.commons.Constants;
 import br.com.challengeaccepted.commons.Session;
 import br.com.challengeaccepted.db.BancoCreate;
 import br.com.challengeaccepted.exception.NoConnectionException;
@@ -70,7 +72,7 @@ public class LoginActivity extends ActionBarActivity {
 	}
 	
 	private void login(final String email, final String password) {
-		new AsyncTask<Void, Void, User>() {
+		new AsyncTask<Void, Void, LoginResult>() {
 			private Exception e = null;
 			
 			@Override
@@ -80,7 +82,7 @@ public class LoginActivity extends ActionBarActivity {
 			}
 
 			@Override
-			protected User doInBackground(Void... params) {
+			protected LoginResult doInBackground(Void... params) {
 				try {
 					return UserAPI.login(email, password);
 				} catch (NoConnectionException e) {
@@ -94,42 +96,42 @@ public class LoginActivity extends ActionBarActivity {
 			}
 			
 			@Override
-			protected void onPostExecute(User result) {
+			protected void onPostExecute(LoginResult result) {
 				if (progressDialog != null) {
 					progressDialog.dismiss();
 					progressDialog = null;
 				}
 				
-				if (e instanceof NoConnectionException) {
+				if (e instanceof NoConnectionException || result == null) {
 					Toast.makeText(LoginActivity.this, getString(R.string.no_connection),
 							Toast.LENGTH_SHORT).show();
-				// Usuario nao encontrado - Registro
-				} else if (e instanceof UserNotFoundException) {
-					Intent i = new Intent(LoginActivity.this, RegistrationActivity.class);
-					i.putExtra("email", email);
-					i.putExtra("password", password);
-					startActivity(i);
-					Toast.makeText(LoginActivity.this, getString(R.string.user_not_found_please_register),
-							Toast.LENGTH_SHORT).show();
-				// Usuario ou senha incorretos
-				} else if (e instanceof WrongLoginException){
-					Toast.makeText(LoginActivity.this, getString(R.string.wrong_login_or_password),
-							Toast.LENGTH_SHORT).show();
-				} else {
-					if (result != null){
-						BancoCreate bd = new BancoCreate(LoginActivity.this);
-						bd.setFriends(result);
-						Toast.makeText(LoginActivity.this, getString(R.string.login_success),
+				} else if (result.getErrorMessage() != null) {
+					switch (Integer.parseInt(result.getErrorMessage())) {
+					case Constants.ERROR_PASSWORD_INCORRECT:
+						Toast.makeText(LoginActivity.this, getString(R.string.wrong_login_or_password),
 								Toast.LENGTH_SHORT).show();
-						Session.getSession().login(result, LoginActivity.this);
-						Intent i = new Intent(LoginActivity.this, MainActivity.class);
-						i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						break;
+					case Constants.ERROR_USER_NOT_FOUND:
+						Intent i = new Intent(LoginActivity.this, RegistrationActivity.class);
+						i.putExtra("email", email);
+						i.putExtra("password", password);
 						startActivity(i);
-						finish();
-					} else {
-						Toast.makeText(LoginActivity.this, getString(R.string.login_fail),
+						Toast.makeText(LoginActivity.this, getString(R.string.user_not_found_please_register),
 								Toast.LENGTH_SHORT).show();
+						break;
+					default:
+						break;
 					}
+				} else {
+					BancoCreate bd = new BancoCreate(LoginActivity.this);
+					bd.setFriends(result.getResult());
+					Toast.makeText(LoginActivity.this, getString(R.string.login_success),
+							Toast.LENGTH_SHORT).show();
+					Session.getSession().login(result.getResult(), LoginActivity.this);
+					Intent i = new Intent(LoginActivity.this, MainActivity.class);
+					i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(i);
+					finish();
 				}
 			}
 		}.execute();
