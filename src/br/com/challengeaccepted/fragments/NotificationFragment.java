@@ -101,7 +101,7 @@ public class NotificationFragment extends ListFragment {
 			if (!isCancelled() && isAdded()){
 				if (e instanceof NoConnectionException) {
 					Toast.makeText(context, getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
-					loadingLayout.setVisibility(View.GONE);
+//					loadingLayout.setVisibility(View.GONE);
 				} else if (e instanceof UnauthorizedException) {
 					// TODO: login
 				} else {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ChallengeAccepted</string>
+    <string name="app_name">iDare</string>
     <string name="activity_choose_friend">Quem você irá desafiar?</string>
     <string name="activity_challenge">Criação do Desafio</string>
     <string name="menu_settings">Settings</string>

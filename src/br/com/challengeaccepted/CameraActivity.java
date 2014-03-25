@@ -37,6 +37,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import br.com.challengeaccepted.util.CameraPreview;
 import br.com.challengeaccepted.util.Log;
@@ -57,11 +58,14 @@ public class CameraActivity extends Activity implements PictureCallback {
 	private MediaRecorder mediaRecorder;
 	private MyCameraSurfaceView myCameraSurfaceView;
 	private String videoPath = null;
+	private ImageButton cameraButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_camera);
+		
+		cameraButton = (ImageButton) findViewById(R.id.cameraButton);
 		
 		recording = false;
 		
@@ -77,6 +81,7 @@ public class CameraActivity extends Activity implements PictureCallback {
 			
 			if (!isVideo) {
 			    setupPictureParameters();
+			    cameraButton.setImageResource(R.drawable.bt_take_photo);
 			}
 			
 		} else {
